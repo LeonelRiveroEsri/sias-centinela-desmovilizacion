@@ -11,6 +11,11 @@
 var PORTAL_URL = "https://sig.aminerals.cl/portal";
 var ITEM_VISTA_ID = "d0bf25b15c7f45f8b85deed166cd2046";
 var CAPA_ID = 0;
+var SURVEY_ID = "26670b16dd2645d8a0615e0247f55a8b";
+var SURVEY_URL = Concatenate([
+    "https://survey123.arcgis.com/share/",
+    SURVEY_ID
+]);
 
 var portal = Portal(PORTAL_URL);
 var campos = [
@@ -109,6 +114,11 @@ for (var sia in ordenadas) {
         "Responsable no informado"
     );
     var url = TextoSeguro(sia["url_sharepoint"], "");
+    var urlSurvey = Concatenate([
+        SURVEY_URL,
+        "?portalUrl=", UrlEncode(PORTAL_URL),
+        "&field:id_sias=", UrlEncode(Text(sia["id_sias"]))
+    ]);
 
     var enlace = "";
     if (!IsEmpty(url)) {
@@ -121,6 +131,15 @@ for (var sia in ordenadas) {
             'Abrir expediente</a>'
         ]);
     }
+
+    var enlaceSurvey = Concatenate([
+        '<a href="', urlSurvey,
+        '" target="_blank" rel="noopener noreferrer" ',
+        'style="display:inline-block;margin-top:12px;margin-right:8px;',
+        'padding:8px 12px;border-radius:6px;background:#067647;',
+        'color:#ffffff;font-size:12px;font-weight:700;',
+        'text-decoration:none;">Iniciar desmovilizacion</a>'
+    ]);
 
     var html = Concatenate([
         '<div style="font-family:Arial,sans-serif;background:#ffffff;',
@@ -162,7 +181,7 @@ for (var sia in ordenadas) {
         '<strong>Responsable:</strong> ', responsable,
         ' &nbsp;|&nbsp; <strong>Fin contrato:</strong> ',
         FechaCorta(sia["termino_de_contrato"]), '</div>',
-        enlace,
+        enlaceSurvey, enlace,
         '</div>'
     ]);
 
@@ -181,6 +200,7 @@ for (var sia in ordenadas) {
             dias_atraso: diasAtraso,
             situacion: situacion,
             url_sharepoint: Text(sia["url_sharepoint"]),
+            url_survey_add: urlSurvey,
             html: html
         }
     });
@@ -201,6 +221,7 @@ var resultado = {
         { name: "dias_atraso", alias: "Dias de atraso", type: "esriFieldTypeInteger" },
         { name: "situacion", alias: "Situacion", type: "esriFieldTypeString" },
         { name: "url_sharepoint", alias: "Expediente", type: "esriFieldTypeString" },
+        { name: "url_survey_add", alias: "Iniciar desmovilizacion", type: "esriFieldTypeString" },
         { name: "html", alias: "Tarjeta HTML", type: "esriFieldTypeString", length: 8000 }
     ],
     geometryType: "",
