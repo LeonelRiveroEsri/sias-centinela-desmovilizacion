@@ -117,7 +117,8 @@ for (var sia in ordenadas) {
     var urlSurvey = Concatenate([
         SURVEY_URL,
         "?portalUrl=", UrlEncode(PORTAL_URL),
-        "&field:id_sias=", UrlEncode(Text(sia["id_sias"]))
+        "&field:id_sias=", UrlEncode(Text(sia["id_sias"])),
+        "&hide=navbar,header,description"
     ]);
 
     var enlace = "";
